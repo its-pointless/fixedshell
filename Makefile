@@ -19,5 +19,5 @@ clean:
 .PHONY: uninstall
 uninstall:
 	rm ${PREFIX}/bin/fixedshe
-	rm ${PREFIX}/var/lib/libandroid-fixshebang.so
+	rm ${PREFIX}/lib/libandroid-fixshebang.so
 
