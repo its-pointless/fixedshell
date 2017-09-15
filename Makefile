@@ -1,15 +1,16 @@
-IDIR =../include
-CC=clang
+CC?=clang
 
 libandroid-fixshebang.so: libandroid-fixshebang.c
-	$(CC) -Wall -shared -o libandroid-fixshebang.so libandroid-fixshebang.c
+	$(CC) -Wall -shared -D_USE_GNU -fPIC -o libandroid-fixshebang.so libandroid-fixshebang.c
 
 .PHONY: install
 install:
+	mkdir -p ${PREFIX}/bin/
 	cp fixedshe ${PREFIX}/bin/
 	chmod 755 ${PREFIX}/bin/fixedshe
-	cp libandroid-fixshebang.so ${PREFIX}/var/lib
-	chmod 655 ${PREFIX}/var/lib/libandroid-fixshebang.so
+	mkdir -p ${PREFIX}/lib/
+	cp libandroid-fixshebang.so ${PREFIX}/lib/
+	chmod 655 ${PREFIX}/lib/libandroid-fixshebang.so
 
 .PHONY: clean
 clean:
