@@ -21,12 +21,12 @@ else
 fi
 if [ "$da" = "" ]; then
 	echo "starting $shell with working shebangs"
-	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so $shell
+	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so exec $shell
 
 elif [ "$da" = "-l" ]; then
 	echo "starting $shell with working shebangs"
-	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so $shell  $1 $2 $3
+	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so exec $shell  $1 $2 $3
 else
 	echo "starting $@ with working shebangs"
-	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so $@
+	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so exec $@
 fi
