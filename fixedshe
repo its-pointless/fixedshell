@@ -4,25 +4,28 @@ if [  "$da" = "chsh" ]; then
 	echo "using fixedshe as default shell\n this will redirect to current default shell"
 	chsh
 	mv ~/.termux/shell ~/.fixedshe
-	ln -sf $( which fixedshe ) ~/.termux/shell  
+	ln -sf $( which fixedshe ) ~/.termux/shell
 	exit
 fi
+if [ -f ~/.termux/shell ]; then
 	shell=$(basename $(readlink ~/.termux/shell))
 	if [ $shell = "fixedshe" ]; then
 		if [ -f ~/.fixedshe ]; then
-		shell=$(basename $(readlink ~/.fixedshe))
+			shell=$(basename $(readlink ~/.fixedshe))
 		else 
-		shell=bash
+			shell=bash
 		fi
-		
 	fi
+else
+	shell=bash
+fi
 if [ "$da" = "" ]; then
-echo "starting $shell with working shebangs"
-	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so $shell 
-	
-elif [ "$da" = "-l" ]; then 
 	echo "starting $shell with working shebangs"
-	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so $shell  $1 $2 $3 
+	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so $shell
+
+elif [ "$da" = "-l" ]; then
+	echo "starting $shell with working shebangs"
+	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so $shell  $1 $2 $3
 else
 	echo "starting $@ with working shebangs"
 	LD_PRELOAD=$PREFIX/lib/libandroid-fixshebang.so $@
