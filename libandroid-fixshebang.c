@@ -18,7 +18,7 @@ int execve(const char *filename, char *const argv[], char *const envp[]) {
 	int argc;
 	char *DN = dirname(filename);
 	char *BN = basename(filename);
-	char st[1024];
+	char st[strlen(BN) + strlen(termbinpath) + 2];
 	char SBN[1024];
 	newFilename = filename;
 	newArgv = (char **) argv;
@@ -82,7 +82,7 @@ int execve(const char *filename, char *const argv[], char *const envp[]) {
 	*/
 	
 	if  ( strcmp(dirname(buffer_p), OLD_PATH) == 0){
-		sprintf(SBN, basename(buffer_p)) ;
+		strncpy(SBN, basename(buffer_p), sizeof(SBN)) ;
 	if (strcmp(SBN ,"python") == 0 && getenv("SHEBANG_PYTHON2") != NULL) { 
 		strcpy(SBN, "python2");}
 
