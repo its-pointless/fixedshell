@@ -1,17 +1,17 @@
 #!/data/data/com.termux/files/usr/bin/sh
 da=$( echo $1 )
 if [  "$da" = "chsh" ]; then 
-	echo "using fixedshe as default shell\n this will redirect to current default shell"
+	echo "using fixedshell as default shell\n this will redirect to current default shell"
 	chsh
-	mv ~/.termux/shell ~/.fixedshe
-	ln -sf $( which fixedshe ) ~/.termux/shell
+	mv ~/.termux/shell ~/.fixedshell
+	ln -sf $( which fixedshell ) ~/.termux/shell
 	exit
 fi
 if [ -f ~/.termux/shell ]; then
 	shell=$(basename $(readlink ~/.termux/shell))
-	if [ $shell = "fixedshe" ]; then
-		if [ -f ~/.fixedshe ]; then
-			shell=$(basename $(readlink ~/.fixedshe))
+	if [ $shell = "fixedshell" ]; then
+		if [ -f ~/.fixedshell ]; then
+			shell=$(basename $(readlink ~/.fixedshell))
 		else 
 			shell=bash
 		fi
