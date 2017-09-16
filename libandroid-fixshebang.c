@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <libgen.h>
 #define OLD_PATH "/usr/bin"
-#define BIN_SH "/data/data/com.termux/files/usr/bin/sh";
-#define USR_BIN_ENV "/data/data/com.termux/files/usr/bin/env";
-static const char *termbinpath = "/data/data/com.termux/files/usr/bin";
+#define BIN_SH "/data/data/com.termux/files/usr/bin/sh"
+#define USR_BIN_ENV "/data/data/com.termux/files/usr/bin/env"
+#define termbinpath  "/data/data/com.termux/files/usr/bin"
 
 int execve(const char *filename, char *const argv[], char *const envp[]) {
 	FILE *fp;
@@ -19,8 +19,10 @@ int execve(const char *filename, char *const argv[], char *const envp[]) {
 	char *DN = dirname(filename);
 	char *BN = basename(filename);
 	char st[1024];
+	char SBN[1024];
 	newFilename = filename;
 	newArgv = (char **) argv;
+
 
 	if (strcmp(filename, "/usr/bin/env") == 0) {
 		newFilename = USR_BIN_ENV;
@@ -58,7 +60,6 @@ int execve(const char *filename, char *const argv[], char *const envp[]) {
 	buffer[strlen(buffer) - 1] = '\0';
 
 	if (buffer[0] != '#' || buffer[1] != '!') {
-		newFilename = st;
 		goto final;
 	}
 
@@ -79,21 +80,30 @@ int execve(const char *filename, char *const argv[], char *const envp[]) {
 		goto final;
 	}
 	*/
-	if  (strcmp(DN, OLD_PATH) == 0 ){
-		newFilename = USR_BIN_ENV;
-	for (argc = 0; argv[argc]; argc++) {}
-		
-	argc++;
-	newArgv = malloc(sizeof(*newArgv) * (argc + 3));
-	newArgv[0] = USR_BIN_ENV;
-	newArgv[1] =  BN;
-	newArgv[2] = buffer_e;
 	
-	for (argc = 0; argv[argc]; argc++) {
+	if  ( strcmp(dirname(buffer_p), OLD_PATH) == 0){
+		sprintf(SBN, basename(buffer_p)) ;
+	if (strcmp(SBN ,"python") == 0 && getenv("SHEBANG_PYTHON2") != NULL) { 
+		strcpy(SBN, "python2");}
+
+		
+	sprintf(st,"%s/%s", termbinpath, SBN);
+                newFilename = st;
+	for (argc = 0; argv[argc]; argc++) {}
+
+        argc++;
+
+        newArgv = malloc(sizeof(*newArgv) * (argc + 3));
+        newArgv[0] = st;
+        newArgv[1] =  filename;
+        newArgv[2] = buffer_e;
+
+        for (argc = 0; argv[argc]; argc++) {
                 newArgv[argc + 2] = argv[argc];
         }
         newArgv[argc + 2] = NULL;
-        }	
+        }
+        	
 	if  (strcmp(buffer_p, "/bin/sh") ==0 ){
         newFilename = USR_BIN_ENV;
         for (argc = 0; argv[argc]; argc++) {}
@@ -113,8 +123,14 @@ int execve(const char *filename, char *const argv[], char *const envp[]) {
         newFilename = USR_BIN_ENV;
         for (argc = 0; argv[argc]; argc++) {}
 
-        argc++;
-        newArgv = malloc(sizeof(*newArgv) * (argc + 3));
+	while (buffer_e[0] == ' ') {
+                buffer_e++;
+        }
+	
+	strncpy(SBN, buffer_e, 6);
+	argc++;
+        
+	newArgv = malloc(sizeof(*newArgv) * (argc + 3));
         newArgv[0] = USR_BIN_ENV;
         newArgv[1] = buffer_e;
 	
